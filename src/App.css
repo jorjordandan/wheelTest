@@ -8,10 +8,18 @@
   overflow: hidden;
 }
 
-.wheel {
+.wheel-container {
   position: absolute;
-  height: 60vmin;
-  pointer-events: none;
+  top: 0px;
+  left: 0px;
+  height: 800px;
+  width: 800px;
+}
+
+.wheel {
+  position:absolute;
+  height: 100%;
+  /* pointer-events: none; */
   transition: all 0.5s ease-in-out;
 }
 .posInfo{

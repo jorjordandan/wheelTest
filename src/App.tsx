@@ -10,8 +10,9 @@ import Layer7 from "./images/7.svg";
 import Layer8 from "./images/8.svg";
 import Layer9 from "./images/9.svg";
 import Layer10 from "./images/10.svg";
+import Four from './Four';
 import "./App.css";
-import Ring from "./Ring";
+import Wheel from "./Wheel";
 
 const wheelInit = [
   { src: Layer1, rot: 0, opacity: 1 },
@@ -41,6 +42,24 @@ function App() {
   const [scale, setScale] = useState(1);
   const [crazy, setCrazy] = useState(true);
   const [text, setText] = useState(textExamples[0].text);
+  const [x, setX] = useState();
+  const [y, setY] = useState();
+
+  useEffect(
+    () => {
+      const update = (e) => {
+        setX(e.x)
+        setY(e.y)
+      }
+      window.addEventListener('mousemove', update)
+      window.addEventListener('touchmove', update)
+      return () => {
+        window.removeEventListener('mousemove', update)
+        window.removeEventListener('touchmove', update)
+      }
+    },
+    [setX, setY]
+  )
 
   const goCrazy = () => {
     const inter = setInterval(() => {
@@ -70,8 +89,8 @@ function App() {
   const randPoser = () => {
     // setCrazy(false);
     const randomPos = [
-      Math.floor(Math.random() * window.innerWidth),
-      Math.floor(Math.random() * window.innerHeight),
+      Math.floor(Math.random() * window.innerWidth/2),
+      Math.floor(Math.random() * window.innerHeight/2),
     ];
     setPos(randomPos);
   };
@@ -110,22 +129,19 @@ function App() {
     setCrazy(!crazy);
   };
 
+  const testclick = (e) => {
+    console.log(e.target)
+
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        {wheel.map((layer, index) => {
-          return (
-            <Ring
-              key={index}
-              idx={index}
-              layer={layer}
-              scale={scale}
-              pos={pos}
-            />
-          );
-        })}
-        <p class="posInfo">x: {pos[0]}, y: {pos[1]}, scale: {scale} </p>
-        {/* <p className="controlPanel">
+      
+        <p className="posInfo">x: {pos[0]}, y: {pos[1]}, mouseX: {x}, mouseY: {y}, scale: {scale}</p>
+
+        <Wheel wheel={wheel} pos={pos} scale={scale} />
+        <div className="controlPanel">
           <p>{text}</p>
           <button onClick={changeText}>
             Change Text
@@ -136,7 +152,7 @@ function App() {
           <button className="button" type="button" onClick={scaler}>
             Scale randomly
           </button>
-          <button className="button" type="button" onClick={rotateRand}>
+          {/* <button className="button" type="button" onClick={rotateRand}>
             rotate randomly
           </button>
           <button className="button" type="button" onClick={fadeRandomly}>
@@ -144,8 +160,8 @@ function App() {
           </button>
           <button className="button" type="button" onClick={setAuto}>
             toggle auto
-          </button> 
-        </p> */}
+          </button>  */}
+        </div>
       </header>
     </div>
   );
